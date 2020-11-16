@@ -6,7 +6,8 @@ import Stripe from 'stripe';
 export class PaymentService {
   public constructor(@InjectStripe() private readonly stripe: Stripe) { }
 
-
+  // need to check is this is existing user in our system, because all user must register on mobile app
+  // if found the user only proceed subscription
   async createCustomer(body) {
     let params = {
       email: body.email,
@@ -148,7 +149,7 @@ export class PaymentService {
   async subscribe(id) {
     return await this.stripe.subscriptions.create({
       customer: id,
-      items: [{ price: "price_1HHkN5I0PB9l3KusVULZEmqW" }]
+      items: [{ price: "price_1HnZbqBJBXDtpMAEEKokSQD9" }]
     });
   }
 
