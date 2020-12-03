@@ -122,7 +122,7 @@ export class SettingService {
         }
     }
 
-
+    //=======================
     async findHashTag(findData: FindConditions<HashTag>): Promise<HashTag[]> {
         return this.postHashTagRepository.find(findData);
 
@@ -163,6 +163,10 @@ export class SettingService {
         return this.cityRepository.find(findData);
     }
 
+    async findAllCity(): Promise<City[]> {
+        return this.cityRepository.find();
+    }
+
     async findReport(userId: number, postId: number): Promise<any> {
         const findData = { where: { userId: userId, postId: postId } };
         const reportPost = await this.reportPostRepository.findOne(findData);
@@ -194,10 +198,10 @@ export class SettingService {
         }
         await this.saveUserInterest(createUserInterestDto);
         const interest = await this.userInterestRepository.find(findData);
-        return { status: "success", interest: interest};
+        return { status: "success", interest: interest };
     }
 
-    async deletePostInterest(id: number): Promise<any>{
+    async deletePostInterest(id: number): Promise<any> {
         const findData = { postId: id };
         const postInterestRepo = getRepository(PostInterest);
         return await postInterestRepo.delete(findData);
@@ -205,9 +209,9 @@ export class SettingService {
 
     async updateUserTag(id: number, status: string): Promise<any> {
         try {
-            
+
             await this.postUserTagRepository.update(id, { taggedStatus: status });
-            return { status: "success", message: 'Update post tag success'};
+            return { status: "success", message: 'Update post tag success' };
         } catch (err) {
             return { message: "Delete post fail, please try again" };
         }

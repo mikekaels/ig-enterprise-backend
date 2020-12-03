@@ -63,4 +63,14 @@ export class PaymentController {
     return this.paymentService.getCustommerInvoices(body);
   }
 
+  @Post('checkout')
+  async createCheckout(@Body() body): Promise<any> {
+    return this.paymentService.createCheckoutSession(body);
+  }
+
+  @Post('price')
+  async createPrice(@Body() body): Promise<any> {
+    return this.paymentService.createPrice(body);
+  }
+
 }

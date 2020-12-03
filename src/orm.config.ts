@@ -15,7 +15,7 @@ export const config: TypeOrmModuleOptions = {
   // localhost
   host: 'localhost',
   password: 'postgres',
-  database: 'IGAPP',
+  database: 'igEnterprise',
   port: 5432,
   type: 'postgres',
   username: 'postgres',

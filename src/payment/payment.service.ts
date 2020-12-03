@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectStripe } from 'nestjs-stripe';
+import { resolve } from 'path';
 import Stripe from 'stripe';
 
 @Injectable()
@@ -227,5 +228,49 @@ export class PaymentService {
       console.log(e);
     }
   };
+
+  async createPrice(body) {
+    return new Promise((resolve, rejects) => {
+      this.stripe.prices.create({
+        // unit_amount: body.amount,
+        currency: 'sgd',
+        unit_amount_decimal: body.amount
+      }).then(res => {
+        return resolve(res);
+      }).catch(err => {
+        return rejects(err);
+      });
+    });
+  }
+
+  async createCheckoutSession(data) {
+
+    return new Promise((resolve, rejects) => {
+      this.stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "sgd",
+              product_data: {
+                name: data.product_name
+              },
+              unit_amount: data.unit_amount * 100
+            },
+            quantity: data.quantity
+          }
+        ],
+        mode: 'payment',
+        success_url: 'http://www.google.com',
+        cancel_url: 'http://www.youtube.com'
+      })
+        .then(session => {
+          return resolve(session);
+        })
+        .catch(err => {
+          return rejects(err);
+        });
+    });
+  }
 
 }

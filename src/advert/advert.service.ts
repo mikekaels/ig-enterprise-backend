@@ -8,6 +8,10 @@ import { User } from '../shared/entity/users.entity';
 import { AdvertDto } from './dto/advert.dto';
 import * as moment from 'moment';
 
+import { City } from '../shared/entity/city.entity';
+import { HashTag } from 'src/shared/entity/hashtag.entity';
+
+
 @Injectable()
 export class AdvertService {
     constructor(
@@ -16,7 +20,12 @@ export class AdvertService {
         private readonly settingService: SettingService,
         @InjectRepository(Post)
         private readonly postRepository: Repository<Post>,
-
+        @InjectRepository(City)
+        private readonly cityRepository: Repository<City>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        @InjectRepository(HashTag)
+        private readonly hastagRepository: Repository<HashTag>,
     ) { }
 
     // temp to put the imageurl to other sample image
@@ -98,5 +107,52 @@ export class AdvertService {
             return { message: "create advert fail, please try again" };
         }
 
+    }
+
+    async findAllCity(): Promise<City[]> {
+        return this.cityRepository.find();
+    }
+
+    async findAllUser(search): Promise<User[]> {
+        console.log('SEARCH: ', search);
+
+        if (search) {
+            const searchPattern = "%" + search + "%";
+            return await getRepository(User)
+                .createQueryBuilder("user")
+                .andWhere("user.username like :username", { username: searchPattern })
+                .getMany();
+        } else {
+            return await getRepository(User)
+                .createQueryBuilder("user")
+                .where("user.status = 'A'")
+                .getMany();
+        }
+    }
+
+    async findAllHastag(search): Promise<HashTag[]> {
+        console.log('SEARCH: ', search);
+
+        if (search) {
+            const searchPattern = "%" + search + "%";
+            return await getRepository(HashTag)
+                .createQueryBuilder("hastag")
+                .andWhere("hastag.text like :hastag", { hastag: searchPattern })
+                .getMany();
+        } else {
+            return await getRepository(HashTag)
+                .createQueryBuilder("hastag")
+                .getMany();
+        }
+    }
+
+    async findHastag(search): Promise<User[]> {
+        console.log('SEARCH: ', search);
+        const searchPattern = "%" + search + "%";
+        return await getRepository(User)
+            .createQueryBuilder("user")
+            .where("user.status = 'A'")
+            .andWhere("user.username like :username", { username: searchPattern })
+            .getMany();
     }
 }

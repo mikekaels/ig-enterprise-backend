@@ -15,7 +15,7 @@ import { CreatePostReportDto } from './dto/create-post-report.dto';
 export class SettingController {
     constructor(
         private readonly settingService: SettingService,
-        ) { }
+    ) { }
 
     @Get('interest')
     async getAllInterest(): Promise<Interest[]> {
@@ -41,7 +41,7 @@ export class SettingController {
     async updateUserInterest(@Body() createUserInterestDto: CreateUserInterestDto): Promise<any> {
         return await this.settingService.updateUserInterest(createUserInterestDto);
     }
-    
+
 
     @Post('create/post/interest')
     createPostInterest(@Body() createPostInterestDto: CreatePostInterestDto): void {
@@ -56,7 +56,7 @@ export class SettingController {
     async createPostUserTag(): Promise<any> {
         const createPostUserTagDto = new CreatePostUserTagDto();
         createPostUserTagDto.postId = 15;
-        createPostUserTagDto.userTag = [{"id": 1, "taggedStatus": "A"},{"id": 2, "taggedStatus": "M"}];
+        createPostUserTagDto.userTag = [{ "id": 1, "taggedStatus": "A" }, { "id": 2, "taggedStatus": "M" }];
         const createPostInterestDtoArray = [];
         for (const tag of createPostUserTagDto.userTag) {
             createPostInterestDtoArray.push({ postId: createPostUserTagDto.postId, userId: tag.id, taggedStatus: tag.taggedStatus, createdAt: new Date() });
@@ -64,8 +64,8 @@ export class SettingController {
         // return createPostInterestDtoArray;
         return await this.settingService.savePostUserTag(createPostInterestDtoArray);
     }
-    
-    
+
+
     @Get('find/post/user/tag')
     async findPostUserTag(): Promise<PostUserTag[]> {
         return await this.settingService.findPostUserTag();
@@ -74,6 +74,11 @@ export class SettingController {
     @Get('location')
     async getAllLocation(): Promise<Country[]> {
         return await this.settingService.findAllLocation();
+    }
+
+    @Get('city')
+    async gettAllCity(): Promise<Country[]> {
+        return await this.settingService.findAllCity();
     }
 
     @Get('region/location/:countryId')
@@ -95,5 +100,5 @@ export class SettingController {
     async findReport(@Param('userId') userId: number, @Param('postId') postId: number): Promise<any> {
         return await this.settingService.findReport(userId, postId);
     }
-   
+
 }

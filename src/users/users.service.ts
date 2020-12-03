@@ -138,8 +138,6 @@ export class UsersService {
       .andWhere("users.status = 'A'")
       .orderBy("posts.createdAt", "DESC")
       .getMany();
-
-
   }
 
   async loadActivity(id: number): Promise<any> {

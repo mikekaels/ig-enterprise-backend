@@ -23,8 +23,10 @@ export class AuthService {
             .createQueryBuilder('user')
             .addSelect('user.passHash')
             .where("user.email = :email", { email: login.email })
-            .getOne()
+            .getOne();
         if (!user) {
+            console.log('No User');
+
             return null;
         }
         const validPass = await bcrypt.compare(login.password, user.passHash);
@@ -38,7 +40,7 @@ export class AuthService {
     async login(user: AuthDTO): Promise<any> {
         try {
             const validatedUser = await this.validateUser(user);
-            if (!validatedUser) { return { message: "Login fail, please try again" }; }
+            if (!validatedUser) { return { message: "Validate fail, please try again" }; }
 
             const payload = { email: user.email, sub: validatedUser.id };
             validatedUser.access_token = this.jwtService.sign(payload);
